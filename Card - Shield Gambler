@@ -1,0 +1,35 @@
+import java.awt.Color;
+
+public class ShieldGamblerCard extends Card
+{
+	public ShieldGamblerCard()
+	{
+		super(Color.BLUE, "This card gives you a 25% chance of giving you a shield equivalent to your healthstat otherwise it will reduce all your shield to 0", 3, "Shield Gambler");
+		
+		
+	}
+	
+	public void use(Hero hero)
+	{
+		double gamble = Math.random()*101 + 1;
+		if(gamble <= 25)
+		{
+			hero.setShield(hero.getHealthStat());
+		}
+		else
+		{
+		
+		hero.setShield(0);
+			
+			
+		}
+				
+
+		
+		
+	}
+	
+	
+	
+	
+}
