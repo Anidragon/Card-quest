@@ -1,0 +1,23 @@
+import java.awt.Color;
+
+import javax.swing.JOptionPane;
+
+public class UltimateCombo extends Card
+{
+	public UltimateCombo()
+	{
+		super(Color.GREEN, "This card does your attackstat damage to the opponent, heals you fully, gives you the opponents next move, and gives you 5 energy", 15, "Ultimate Combo");
+		
+		
+	}
+	
+	public void use(Hero hero, Enemies enemy)
+	{
+		JOptionPane.showMessageDialogue(null, "The enemy's next move is " + enemy.getNextMove());
+		hero.setHealth(hero.getHealthStat());
+		enemy.takeDamage(hero.getAttackStat());
+		int amt = hero.getEnergy() + 5;
+		hero.setEnergy(amt);
+	}
+	
+}
