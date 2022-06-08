@@ -1,0 +1,28 @@
+import java.awt.Color;
+
+public class RiskyPlayCard extends Card
+{
+	public RiskyPlayCard()
+	{
+		super(Color.GREEN, "This card will do damage to the oponent ranging between 0 to your attackstat + 25 as well as SETTING your health ranging between 0 and your healthStat + 25", 5, "Risky Play");
+		
+		
+	}
+	
+	public void use(Hero hero, Enemies enemy)
+	{
+		double attack = (Math.random() * (hero.getAttackStat()+25));
+		double health = (Math.random() * (hero.getHealthStat()+25));
+		
+		hero.setHealth((int)(health));
+		enemy.takeDamage((int)(attack));
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+}
