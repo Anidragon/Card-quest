@@ -25,7 +25,9 @@ public class LevelSelect extends JFrame
 	private Hero hero;
     private boolean firstTime = false;
     private AudioPlayer player;
-    private static File file = new File("SaveFile.txt");
+    private static File file = new File("SaveFile.txt"); 
+    
+    //secondary constructor to display win/loss messages
     public LevelSelect(boolean boom, int r) throws IOException, UnsupportedAudioFileException, LineUnavailableException
     {
     	new LevelSelect();
@@ -41,6 +43,7 @@ public class LevelSelect extends JFrame
     	}
     }
     
+    //regular level select constructor for opening the level select frame
 	public LevelSelect() throws IOException, UnsupportedAudioFileException, LineUnavailableException
 	{
 		
@@ -54,6 +57,7 @@ public class LevelSelect extends JFrame
 			 boolean exists = file.exists();
 			 if(!exists)
 			 {
+			 //if it's your first time opening the game, it asks for your name and records it 
 				 String name = JOptionPane.showInputDialog(null, "What is your name? no spaces or /", "", JOptionPane.QUESTION_MESSAGE);
 				 if(name.equals(null) || name.equals("") || name.contains(" ") || name.contains("/"))
 					System.exit(0);
@@ -70,8 +74,10 @@ public class LevelSelect extends JFrame
 			 }
 		}
 		
+		
 		catch(Exception FileNotFoundException)
 		{
+		//creates a save file
 			file.createNewFile();
 			PrintWriter writer = new PrintWriter(file);
 			try
@@ -218,7 +224,7 @@ public class LevelSelect extends JFrame
 	}
 	
 
-	 
+	 	//instantiates JFrame
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setResizable(false);
 		this.setLayout(new GridLayout(4, 4));
@@ -234,7 +240,7 @@ public class LevelSelect extends JFrame
 		ImageIcon frost = new ImageIcon("9.jpg");
 		ImageIcon volc = new ImageIcon("10.jpg");
 		
-		
+		//instantiates menu bar and options 
 		 JMenuBar menuBar = new JMenuBar();
 	        JMenu Options = new JMenu("Options");
 	        JMenuItem Save = new JMenuItem("Save");
@@ -334,6 +340,7 @@ public class LevelSelect extends JFrame
 	        
 	        this.setJMenuBar(menuBar);
 		
+		//creating and setting the locations of buttons
 		JButton level1 = new JButton("Level 1", fields);
 		level1.setRolloverIcon(fields);
 	
@@ -415,6 +422,7 @@ public class LevelSelect extends JFrame
 	    this.add(Spacer2);
 	    
 	    
+	    //when level buttons are clicked, activate a game file with the proper level
 	    level1.addActionListener(new ActionListener()
     	{
 	    	
@@ -646,6 +654,7 @@ public class LevelSelect extends JFrame
 		
 	}
 	
+	//saves hero's stats after opening level select
 	public ArrayList<String> txtToList(File fileparam) throws IOException
 	{
 		ArrayList<String> storage = new ArrayList<String>();
