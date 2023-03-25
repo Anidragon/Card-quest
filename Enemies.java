@@ -2,14 +2,19 @@ import java.util.ArrayList;
 
 public class Enemies {
 
-
+	//stats of the enemies
 	private int health;
 	private int healthStat;
 	private int attackStat;
+	//amount of gold you get for defeating the enemy 
 	private int reward;
+	
+	//implements a turn base damage
 	private int turnsDMG;
 	private int DmgOT;
 	private int shield;
+	
+	//checks if the enemy is alive or not
 	private boolean isdead;
 	
 	public Enemies(int healthStat, int attackStat, int reward)
@@ -22,6 +27,7 @@ public class Enemies {
 			
 	}
 	
+	//sets the values of the enemy to the default values
 	public void atStart()
 	{
 		shield = 0;
@@ -52,7 +58,7 @@ public class Enemies {
 		return attackStat;
 	}
 	
-	
+	//method to deal damage to the enemy
 	public int takeDamage(int damage)
 	{
 		health = health - damage;
@@ -66,6 +72,7 @@ public class Enemies {
 		
 	}
 	
+	//method to implement damage over time
 	public void takeDamageOverTime(int turns, int damage) 
 	{
 		DmgOT = damage;
@@ -124,6 +131,7 @@ public class Enemies {
 		return shield;
 	}
 	
+	//method is overidden by child classes in order to perform an action against the hero 
 	public void TakeAction(Hero hero)
 	{
 		
