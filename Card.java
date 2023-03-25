@@ -1,11 +1,15 @@
 import java.awt.Color;
 
 public class Card {
-	
+	//Color of the card denotes the type of card eg. Red = attack type 
 	private Color color;
+	//effect is the description of the card and what it does in battle
 	private String effect;
+	//energy is the amount that it costs to play
 	private int energy;
+	//name of the card
 	private String name;
+	
 	
 	public Card(Color color, String effect, int energy, String name)
 	{
@@ -15,6 +19,8 @@ public class Card {
 		this.name = name;
 		
 	}
+	
+	//this method is overidden by child classes to implement their usage in battle
 	
 	public void use(Hero hero, Enemies enemy)
 	{
