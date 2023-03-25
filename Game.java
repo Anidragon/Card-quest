@@ -2,6 +2,9 @@
 	import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,6 +12,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*; 
 	
 
@@ -17,13 +22,72 @@ public class Game extends JFrame
 	
 	private Hero hero;
 	private Enemies enemy;
+	private AudioPlayer player;
+	private boolean notSent = true;
+
 	
-	public Game(String back, String MonsterPIC, int MonsterWidth, int MonsterHeight, Hero hero, Enemies enemy) throws IOException
+	public Game(String back, String MonsterPIC, int MonsterWidth, int MonsterHeight, Hero hero, Enemies enemy) throws IOException, UnsupportedAudioFileException, LineUnavailableException, ClassNotFoundException, InstantiationException, IllegalAccessException
 	{
 		
-		//starts game with full screen
-	
 		
+		if(enemy.getReward() == 50)
+		 {
+			 player = new AudioPlayer("Slime.wav", false);
+				player.play();
+		 }
+		if(enemy.getReward() == 850)
+		 {
+			 player = new AudioPlayer("EagleFight.wav", false);
+				player.play();
+		 }
+		if(enemy.getReward() == 700)
+		 {
+			 player = new AudioPlayer("TreeFight.wav", false);
+				player.play();
+		 }
+		if(enemy.getReward() == 1400)
+		 {
+			 player = new AudioPlayer("snow.wav", false);
+				player.play();
+		 }
+		if(enemy.getReward() == 2000)
+		 {
+			 player = new AudioPlayer("MellisFight.wav", false);
+				player.play();
+		 }
+		
+		 if(enemy.getReward() == 540)
+		 {
+			 player = new AudioPlayer("CrabFight.wav", false);
+				player.play();
+		 }
+		 
+		 if(enemy.getReward() == 20)
+		 {
+			 player = new AudioPlayer("GobFight.wav", false);
+				player.play();
+		 }
+		 
+		 if(enemy.getReward() == 170) 
+		 {
+			 player = new AudioPlayer("GolemFight.wav", false);
+				player.play();
+		 }
+		 
+		 if(enemy.getReward() == 300)
+		 {
+			 player = new AudioPlayer("MummyFight.wav", false);
+				player.play();
+		 }
+		 
+		 if(enemy.getReward() == 1000)
+		 {
+			 player = new AudioPlayer("DragonFight.wav", false);
+				player.play();
+		 }
+		
+			 
+	
 		this.hero = hero;
 		this.enemy = enemy;
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -162,7 +226,7 @@ public class Game extends JFrame
     	{
     		public void actionPerformed(ActionEvent e)
     		{
-    			JOptionPane.showMessageDialog(null, "Attack: " + hero.getAttackStat() + "\n" + "Shield: " + hero.getShield() + "\n" + "Gold: " + hero.getGold() + "\n" + "Reward: " + enemy.getReward() +"\n" + "Enemy shield: " + enemy.getShield()+"\n" + "Enemy attack: " + enemy.getAttackStat());
+    			JOptionPane.showMessageDialog(null, hero.getName() + "'s stats: "+ "\n" + "Attack: " + hero.getAttackStat() + "\n" + "Shield: " + hero.getShield() + "\n" + "Gold: " + hero.getGold() + "\n" + "Reward: " + enemy.getReward() +"\n" + "Enemy shield: " + enemy.getShield()+"\n" + "Enemy attack: " + enemy.getAttackStat());
     			
     		}
 
@@ -193,7 +257,7 @@ public class Game extends JFrame
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-       			dispose();
+       			System.exit(0);
        		}
 
        	});
@@ -213,7 +277,18 @@ public class Game extends JFrame
 						e1.printStackTrace();
 					}
     				dispose();
-    				new Shop(hero);
+    				try {
+						player.stop();
+					} catch (IOException | LineUnavailableException | UnsupportedAudioFileException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+    				try {
+						new Shop(hero);
+					} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
     				
     			}
     		}
@@ -235,7 +310,19 @@ public class Game extends JFrame
  						e1.printStackTrace();
  					}
      				dispose();
-     				new LevelSelect();
+     				try {
+						player.stop();
+					} catch (IOException | LineUnavailableException | UnsupportedAudioFileException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+     				try {
+						new LevelSelect();
+					} catch (IOException | UnsupportedAudioFileException | LineUnavailableException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+     				
      				
      			}
      		}
@@ -247,7 +334,7 @@ public class Game extends JFrame
     	{
     		public void actionPerformed(ActionEvent e)
     		{
-    			JOptionPane.showMessageDialog(null, "Name: " + hero.getDeck().getHand().get(0).getName() + "\n" + "Effect: " + hero.getDeck().getHand().get(0).getEffect());
+    			JOptionPane.showMessageDialog(null, "Name: " + hero.getDeck().getHand().get(0).getName() + " | Energy: " + hero.getDeck().getHand().get(0).getEnergy() + "\n" + "Effect: " + hero.getDeck().getHand().get(0).getEffect());
     			
     		}
 
@@ -276,7 +363,33 @@ public class Game extends JFrame
     				healthEnemy.setText(enemy.getHealth() + "/" + enemy.getOHealth());
     				healthHero.setText(hero.getHealth() + "/" + hero.getHealthStat());
     				Energy.setText("Energy: "+ hero.getEnergy());
+    				if(hero.getHealth() <= 0)
+    				{
+    					try {
+    						if(notSent)
+    						{
+							HeroDied();
+							notSent = false;
+    						}
+						} catch (IOException | LineUnavailableException | UnsupportedAudioFileException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+    				}
     				
+    				if(enemy.getHealth() <= 0)
+    				{
+    					try {
+    						if(notSent)
+    						{
+    						EnemyDied();
+    						notSent = false;
+    						}
+						} catch (IOException | LineUnavailableException | UnsupportedAudioFileException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+    				}
     				
     			}
     		}
@@ -287,7 +400,7 @@ public class Game extends JFrame
     	{
     		public void actionPerformed(ActionEvent e)
     		{
-    			JOptionPane.showMessageDialog(null, "Name: " + hero.getDeck().getHand().get(1).getName() + "\n" + "Effect: " + hero.getDeck().getHand().get(1).getEffect());
+    			JOptionPane.showMessageDialog(null, "Name: " + hero.getDeck().getHand().get(1).getName() + " | Energy: " + hero.getDeck().getHand().get(0).getEnergy() + "\n" + "Effect: " + hero.getDeck().getHand().get(1).getEffect());
     			
     		}
 
@@ -316,7 +429,33 @@ public class Game extends JFrame
     				healthEnemy.setText(enemy.getHealth() + "/" + enemy.getOHealth());
     				healthHero.setText(hero.getHealth() + "/" + hero.getHealthStat());
     				Energy.setText("Energy: "+ hero.getEnergy());
+    				if(hero.getHealth() <= 0)
+    				{
+    					try {
+    						if(notSent)
+    						{
+							HeroDied();
+							notSent = false;
+    						}
+						} catch (IOException | LineUnavailableException | UnsupportedAudioFileException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+    				}
     				
+    				if(enemy.getHealth() <= 0)
+    				{
+    					try {
+    						if(notSent)
+    						{
+    						EnemyDied();
+    						notSent = false;
+    						}
+						} catch (IOException | LineUnavailableException | UnsupportedAudioFileException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+    				}
     				
     			}
     		}
@@ -327,11 +466,48 @@ public class Game extends JFrame
     	{
     		public void actionPerformed(ActionEvent e)
     		{
-    			JOptionPane.showMessageDialog(null, "Name: " + hero.getDeck().getHand().get(2).getName() + "\n" + "Effect: " + hero.getDeck().getHand().get(2).getEffect());
+    			JOptionPane.showMessageDialog(null, "Name: " + hero.getDeck().getHand().get(2).getName() + " | Energy: " + hero.getDeck().getHand().get(0).getEnergy() + "\n" + "Effect: " + hero.getDeck().getHand().get(2).getEffect());
     			
     		}
 
     	});
+	    
+	    
+//	    use3.addMouseListener(new MouseListener()
+//	    {
+//	    	
+//
+//			
+//			public void mouseClicked(MouseEvent e) {
+//				
+//				
+//			}
+//
+//			@Override
+//			public void mousePressed(MouseEvent e) {
+//				
+//				
+//			}
+//
+//			@Override
+//			public void mouseReleased(MouseEvent e) {
+//				
+//				
+//			}
+//
+//			@Override
+//			public void mouseEntered(MouseEvent e) {
+//				
+//				use3.setBackground(Color.YELLOW);
+//				
+//			}
+//
+//			@Override
+//			public void mouseExited(MouseEvent e) {
+//				
+//				use3.setBackground(new JButton().getBackground());
+//			}
+//	    });
 	    
 	    use3.addActionListener(new ActionListener()
     	{
@@ -356,7 +532,33 @@ public class Game extends JFrame
     				healthEnemy.setText(enemy.getHealth() + "/" + enemy.getOHealth());
     				healthHero.setText(hero.getHealth() + "/" + hero.getHealthStat());
     				Energy.setText("Energy: "+ hero.getEnergy());
+    				if(hero.getHealth() <= 0)
+    				{
+    					try {
+    						if(notSent)
+    						{
+							HeroDied();
+							notSent = false;
+    						}
+						} catch (IOException | LineUnavailableException | UnsupportedAudioFileException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+    				}
     				
+    				if(enemy.getHealth() <= 0)
+    				{
+    					try {
+    						if(notSent)
+    						{
+    						EnemyDied();
+    						notSent = false;
+    						}
+						} catch (IOException | LineUnavailableException | UnsupportedAudioFileException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+    				}
     				
     			}
     		}
@@ -375,15 +577,65 @@ public class Game extends JFrame
     			 use3.setEnabled(false);
     			 read3.setEnabled(false);
     		
-    			 if(enemy.isDead())
-    			 {
-    				 JOptionPane.showInternalConfirmDialog(null, "you defeated this level and gained" + enemy.getReward() + " coins, would you like to go to the shop?", "Win", JOptionPane.YES_NO_OPTION);
-    			 }
     			 enemy.atStart();
-    			
+    			 if(hero.getHealth() <= 0)
+ 				{
+ 					try {
+ 						if(notSent)
+						{
+						HeroDied();
+						notSent = false;
+						}
+						} catch (IOException | LineUnavailableException | UnsupportedAudioFileException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+ 				}
+ 				
+ 				if(enemy.getHealth() <= 0)
+ 				{
+ 					try {
+ 						if(notSent)
+						{
+						EnemyDied();
+						notSent = false;
+						}
+						} catch (IOException | LineUnavailableException | UnsupportedAudioFileException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+ 				}
     			 
     			 enemy.TakeAction(hero);
-    			 
+    			 if(hero.getHealth() <= 0)
+ 				{
+ 					try {
+ 						if(notSent)
+						{
+						HeroDied();
+						notSent = false;
+						}
+							
+						} catch (IOException | LineUnavailableException | UnsupportedAudioFileException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+ 				}
+ 				
+ 				if(enemy.getHealth() <= 0)
+ 				{
+ 					try {
+ 						if(notSent)
+						{
+						EnemyDied();
+						notSent = false;
+						}
+						} catch (IOException | LineUnavailableException | UnsupportedAudioFileException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+ 				}
+ 				
     			 Deck.setText("Deck: "+ hero.getDeck().getDeck().size());
     			 
  				Discard.setText("Discarded: "+ hero.getDeck().getDiscard().size());
@@ -395,7 +647,34 @@ public class Game extends JFrame
  				Energy.setText("Energy: "+ hero.getEnergy());
     			 
     			hero.atStart();
-    			
+    			if(hero.getHealth() <= 0)
+				{
+					try {
+						if(notSent)
+						{
+						HeroDied();
+						notSent = false;
+						}
+						
+					} catch (IOException | LineUnavailableException | UnsupportedAudioFileException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				
+				if(enemy.getHealth() <= 0)
+				{
+					try {
+						if(notSent)
+						{
+						EnemyDied();
+						notSent = false;
+						}
+					} catch (IOException | LineUnavailableException | UnsupportedAudioFileException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
     			 End.setEnabled(true);
     			 use1.setEnabled(true);
     			 read1.setEnabled(true);
@@ -432,28 +711,28 @@ public class Game extends JFrame
 	    
 	
 	
-//	public void GameLoad (int level, String name, int Atk, int health, int gold) throws IOException
-//	{
-//		switch(level)
-//		{
-//		 
-//		case 1: 
-//			Hero hero = new Hero(name, Atk, health, gold);
-//			Goblin goblin = new Goblin( 120, 20, 100);
-//			level = 1;
-//			new Game("Fields.jpg", "Goblin.png", 500, 450, hero , goblin);
-//		
-//		case 2:
-//			
-//			level = 2;
-//			
-//			
-//			
-//		}
-//		
-//	}
+
 	
 	
+
+	public void HeroDied() throws IOException, LineUnavailableException, UnsupportedAudioFileException
+	{
+		player.stop();
+		this.dispose();
+		new LevelSelect(true, enemy.getReward());
+			
+	}
+	
+	public void EnemyDied() throws IOException, LineUnavailableException, UnsupportedAudioFileException
+	{
+		
+		player.stop();
+		hero.gainReward(enemy.getReward());
+		Stage.save(hero);
+		this.dispose();
+		new LevelSelect(false, enemy.getReward());
+			
+	}
 	
 	
 	
@@ -466,12 +745,6 @@ public class Game extends JFrame
 	{
 		return hero;
 	}
-	
-	public static void main (String args[]) throws IOException
-	{
-		Hero hero = new Hero("Ani", 5, 20, 0);
-		BrownDragon dragon = new BrownDragon(120, 20, 100);
-		new Game("Fields.jpg", "GreenDragon.png", 500, 450, hero , dragon);
-	}
+
 	
 }

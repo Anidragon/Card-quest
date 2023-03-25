@@ -1,0 +1,32 @@
+import java.awt.Color;
+
+public class EnergyGamblerCard extends Card 
+{
+	public EnergyGamblerCard()
+	{
+		super(Color.BLUE, "This card gives you a 30% chance of giving you 10 energy but a 70% chance of losing 3", 2, "Energy Gambler");
+		
+		
+	}
+	public void use(Hero hero)
+	{
+		double gamble = Math.random()*101 + 1;
+		
+		if(gamble <= 30)
+		{
+		int amt = hero.getEnergy() + 10;
+		hero.setEnergy(amt);
+			
+		}
+		else
+		{
+			int amt = hero.getEnergy() - 3;
+			hero.setEnergy(amt);
+		}
+		
+	}
+	
+	
+	
+	
+}

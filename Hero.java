@@ -47,10 +47,6 @@ public class Hero
 		
 		health = health - damage;
 		
-		if(health <= 0)
-		{
-			die();
-		}
 		return health;
 	}
 	
@@ -77,13 +73,6 @@ public class Hero
     	gold += reward;
     	
     }
-
-    
-	public void die() 
-	{
-	   
-		
-	}
 
 	
 	public void takeDamageOverTime(int turns, int damage) 
@@ -132,10 +121,6 @@ public class Hero
 		return gold;
 	}
 	
-	public void gainGold(int reward)
-	{
-		gold += reward;
-	}
 	
 	public int getOAttack()
 	{
@@ -178,6 +163,26 @@ public class Hero
 		returner.addAll(deck.getHand());
 		return returner;
 	}
+	
+	public ArrayList<String> getFullDeckListStr()
+	{
+		ArrayList<String> returner = new ArrayList<String>();
+		for(int i = 0; i < deck.getDeck().size() ; i++)
+		{
+			returner.add(deck.getDeck().get(i).getName());
+		}
+		
+		for(int i = 0; i < deck.getHand().size() ; i++)
+		{
+			returner.add(deck.getHand().get(i).getName());
+		}
+		
+		for(int i = 0; i < deck.getDiscard().size() ; i++)
+		{
+			returner.add(deck.getDiscard().get(i).getName());
+		}
+		return returner;
+	}
 
 
 
@@ -194,5 +199,11 @@ public class Hero
 		{
 			health = healthStat;
 		}
+	}
+	public void setShield(int amt)
+	{
+		shield = amt;
+		
+		
 	}
 }

@@ -111,11 +111,7 @@ public class BrownDragon extends Enemies
 		return nextMove;
 	}
 	
-	public void die(Hero hero, Enemies enemy)
-	{
-		super.setDeath();
-		hero.gainGold(enemy.getReward());
-	}
+	
 
 	
 	
