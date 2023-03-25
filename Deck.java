@@ -13,6 +13,7 @@ public class Deck
 		this.discardPile = new ArrayList<Card>();
 	}
 	
+	//player takes cards from the top of the deck 
 	public void draw()
 	{
 		int missing = 3 - hand.size();
@@ -35,6 +36,7 @@ public class Deck
 		}
 	}
 	
+	//shuffles deck
 	public void reShuffle()
 	{
 		while(discardPile.size() > 0)
@@ -43,6 +45,7 @@ public class Deck
 		}
 	}
 	
+	//activates card effect
 	public void use(Card card, Hero hero, Enemies enemy)
 	{
 		card.use(hero, enemy);
